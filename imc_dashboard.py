@@ -1,20 +1,22 @@
-
-import streamlit as st
 import pandas as pd
-import plotly.graph_objects as go
 import plotly.express as px
+import plotly.graph_objects as go
+import streamlit as st
 
-# ---------------------------------------------------------
-# CONFIGURACIÓN DE LA PÁGINA
-# ---------------------------------------------------------
+# ==========================================
+# CONFIGURACIÓN DE PÁGINA (Única y al inicio)
+# ==========================================
 st.set_page_config(
     page_title="Dashboard Integral de Salud & IMC",
-    page_layout="wide",
-    initial_sidebar_state="expanded"
+    layout="wide",
+    initial_sidebar_state="expanded",
 )
 
-# Estilos CSS para optimización visual
-st.markdown("""
+# ---------------------------------------------------------
+# ESTILOS CSS PARA OPTIMIZACIÓN VISUAL
+# ---------------------------------------------------------
+st.markdown(
+    """
     <style>
     .main {
         background-color: #f8f9fa;
@@ -45,13 +47,17 @@ st.markdown("""
         color: #495057;
     }
     </style>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 
 # ---------------------------------------------------------
 # ENCABEZADO PRINCIPAL
 # ---------------------------------------------------------
 st.title("🩺 Dashboard de Salud y Evaluación Antropométrica")
-st.caption("Herramienta independiente para evaluación metabólica, control de peso e IMC.")
+st.caption(
+    "Herramienta independiente para evaluación metabólica, control de peso e IMC."
+)
 st.markdown("---")
 
 # ---------------------------------------------------------
