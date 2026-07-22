@@ -147,80 +147,43 @@ else:
 # ---------------------------------------------------------
 # BLOQUE 1: VELOCÍMETRO DE IMC & EVALUACIÓN DE PESO
 # ---------------------------------------------------------
-col1, col2 = st.columns([1.2, 1])
-
-with col1:
-    st.subheader("📊 Velocímetro IMC (Plotly Gauge)")
-    
-    fig_gauge = go.Figure(go.Indicator(
+# ==========================================
+# CONSTRUCCIÓN DEL GAUGE (VELOCÍMETRO IMC)
+# ==========================================
+fig_gauge = go.Figure(
+    go.Indicator(
         mode="gauge+number",
-        value=imc,
-        number={'suffix': " kg/m²", 'font': {'size': 26}},
-        title={'text': f"Clasificación OMS: <b>{clasificacion_oms}</b>", 'font': {'size': 16, 'color': color_oms}},
+        value=imc,  # Tu variable donde calculaste el IMC
+        title={"text": "Índice de Masa Corporal (IMC)"},
         gauge={
-            'axis': {'range': [10, 45], 'tickwidth': 1, 'tickcolor': "#333333"},
-            'bar': {'color': "#111111", 'width': 3},
-            'bgcolor': "white",
-            'borderwidth': 2,
-            'bordercolor': "#cccccc",
-            'steps': [
-                {'range': [10, 18.5], 'color': '#29b6f6'},
-                {'range': [18.5, 25], 'color': '#66bb6a'},
-                {'range': [25, 30], 'color': '#ffa726'},
-                {'range': [30, 35], 'color': '#ef5350'},
-                {'range': [35, 45], 'color': '#b71c1c'}
+            "axis": {"range": [10, 40], "tickwidth": 1, "tickcolor": "darkblue"},
+            "bar": {"color": "#1f77b4"},  # Solo definir el color como string en bar
+            "bgcolor": "white",
+            "borderwidth": 2,
+            "bordercolor": "gray",
+            "steps": [
+                {"range": [10, 18.5], "color": "#29b6f6"},  # Bajo peso
+                {"range": [18.5, 25.0], "color": "#66bb6a"},  # Normal
+                {"range": [25.0, 30.0], "color": "#ffa726"},  # Sobrepeso
+                {"range": [30.0, 35.0], "color": "#ef5350"},  # Obesidad I
+                {"range": [35.0, 40.0], "color": "#b71c1c"},  # Obesidad II/III
             ],
-            'threshold': {
-                'line': {'color': "#000000", 'width': 4},
-                'thickness': 0.75,
-                'value': imc
-            }
-        }
-    ))
-    fig_gauge.update_layout(
-        height=290,
-        margin=dict(l=20, r=20, t=30, b=20),
-        paper_bgcolor="rgba(0,0,0,0)"
+            "threshold": {
+                "line": {"color": "red", "width": 4},
+                "thickness": 0.75,
+                "value": imc,
+            },
+        },
     )
-    st.plotly_chart(fig_gauge, use_container_width=True)
+)
 
-with col2:
-    st.subheader("⚖️ Evaluación de Peso Ideal")
-    
-    st.markdown(f"""
-    <div class="metric-card">
-        <div class="metric-title">Rango de Peso Saludable (OMS)</div>
-        <div class="metric-value">{peso_ideal_min} kg – {peso_ideal_max} kg</div>
-        <div class="metric-subtext">Basado en un IMC de 18.5 a 24.9 kg/m²</div>
-    </div>
-    """, unsafe_allow_html=True)
+# Ajustes de diseño y margen
+fig_gauge.update_layout(
+    height=300, margin=dict(l=20, r=20, t=50, b=20), paper_bgcolor="rgba(0,0,0,0)"
+)
 
-    if kilos_por_perder > 0:
-        st.markdown(f"""
-        <div class="metric-card" style="border-left-color: #ef5350;">
-            <div class="metric-title">Exceso de Peso Estimado</div>
-            <div class="metric-value" style="color: #c62828;">-{kilos_por_perder:.1f} kg</div>
-            <div class="metric-subtext">Kilos por encima del límite superior saludable</div>
-        </div>
-        """, unsafe_allow_html=True)
-    elif kilos_por_ganar > 0:
-        st.markdown(f"""
-        <div class="metric-card" style="border-left-color: #0288d1;">
-            <div class="metric-title">Déficit de Peso Estimado</div>
-            <div class="metric-value" style="color: #0277bd;">+{kilos_por_ganar:.1f} kg</div>
-            <div class="metric-subtext">Kilos necesarios para ingresar al rango normal</div>
-        </div>
-        """, unsafe_allow_html=True)
-    else:
-        st.markdown("""
-        <div class="metric-card" style="border-left-color: #43a047;">
-            <div class="metric-title">Estado del Peso</div>
-            <div class="metric-value" style="color: #2e7d32;">¡En Rango Óptimo!</div>
-            <div class="metric-subtext">Su peso está perfectamente dentro del rango saludable.</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-st.markdown("---")
+# Renderizar en Streamlit
+st.plotly_chart(fig_gauge, use_container_width=True)
 
 # ---------------------------------------------------------
 # BLOQUE 2: METABOLISMO, CALORÍAS Y RANGO SALUDABLE
